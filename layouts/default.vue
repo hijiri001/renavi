@@ -46,7 +46,7 @@
       </v-btn> -->
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
+      <!-- <v-btn
         icon
         @click.stop="handleMenu()"
       >
@@ -55,7 +55,8 @@
           <logout :menu="menu" @logout="menu = false" />
         </v-avatar>
         <v-icon v-else>apps</v-icon>
-      </v-btn>
+      </v-btn> -->
+      <logout />
     </v-toolbar>
     <v-content>
       <v-container>
@@ -112,15 +113,6 @@ export default {
   computed: {
     user () {
       return this.$auth.$state.user
-    }
-  },
-  methods: {
-    handleMenu () {
-      if (this.user) {
-        this.menu = !this.menu
-      } else {
-        this.$router.replace('/login')
-      }
     }
   }
 }

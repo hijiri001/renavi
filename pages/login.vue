@@ -1,45 +1,36 @@
 <template>
-<div>
-  <h2 class="text-center">Login</h2>
-  <hr>
-  <b-alert v-if="error" show variant="danger">{{ error + '' }}</b-alert>
-  <b-alert show v-if="$auth.$state.redirect">
-    You have to login before accessing to <strong>{{ $auth.$state.redirect }}</strong>
-  </b-alert>
-  <b-row align-h="center" align-v="center">
-    <b-col md="4">
-      <b-card bg-variant="light">
-        <busy-overlay />
-        <form @keydown.enter="login">
-        <b-form-group label="Username">
-          <b-input v-model="username" placeholder="anything" ref="username" />
-        </b-form-group>
-
-        <b-form-group label="Password">
-          <b-input type="password" v-model="password" placeholder="123" />
-        </b-form-group>
-
-        <div class="text-center">
-          <b-btn @click="login" variant="primary" block>Login</b-btn>
-        </div>
-        </form>
-      </b-card>
-    </b-col>
-    <b-col md="1">
-      <div class="text-center"><b-badge pill>OR</b-badge></div>
-    </b-col>
-    <b-col md="4" class="text-center pt-4">
-        <b-card title="Social Login" bg-variant="light">
-          <div v-for="s in strategies" :key="s.key" class="mb-2">
-          <b-btn @click="$auth.loginWith(s.key)" block :style="{background: s.color}" class="login-button">Login with {{ s.name }}</b-btn>
-          </div>
-        </b-card>
-    </b-col>
-  </b-row>
-</div>
+  <!-- <v-card class="elevation-12">
+    <v-toolbar dark color="primary">
+      <v-toolbar-title>ログイン</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <v-card-text>
+      <v-form>
+        <v-text-field prepend-icon="person" name="email" label="email" type="email"></v-text-field>
+        <v-text-field id="password" prepend-icon="lock" name="password" label="Password" type="password"></v-text-field>
+      </v-form>
+    </v-card-text>
+    <v-card-actions>
+      <v-chip left>
+        <span>Or</span>
+      </v-chip>
+      <div v-for="s in strategies" :key="s.key" class="mb-2">
+        <v-btn @click="$auth.loginWith(s.key)" block :style="{background: s.color}" class="login-button">Login with {{ s.name }}</v-btn>
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn color="primary">Login</v-btn>
+    </v-card-actions>
+  </v-card> -->
+  <div class="container d-flex align-items-center justify-content-center flex-column">
+    <v-progress-circular :size="70" :width="7" indeterminate color="green"></v-progress-circular>
+    Logging in...
+  </div>
 </template>
 
 <style scoped>
+.container {
+  min-height: 70vh;
+}
 .login-button {
   border: 0;
 };
@@ -49,8 +40,12 @@
 import busyOverlay from '~/components/busy-overlay'
 
 export default {
+  layout: 'center',
   middleware: ['auth'],
   components: { busyOverlay },
+  mounted () {
+    this.$auth.loginWith('google')
+  },
   data () {
     return {
       username: '',

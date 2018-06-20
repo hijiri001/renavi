@@ -1,11 +1,21 @@
 <template>
   <div class="text-xs-center">
     <v-menu
+      v-if="user"
       :close-on-content-click="false"
       :nudge-width="200"
       v-model="menu"
       offset-x
     >
+      <v-btn
+        slot="activator"
+        icon
+        @click.stop="handleMenu()"
+      >
+        <v-avatar size="42">
+          <img :src="user.picture" >
+        </v-avatar>
+      </v-btn>
       <v-card>
         <v-list>
           <v-list-tile avatar>
@@ -25,21 +35,40 @@
         </v-card-actions>
       </v-card>
     </v-menu>
+    <v-btn
+      v-else
+      icon
+      @click.stop="handleMenu()"
+    >
+      <v-icon>apps</v-icon>
+    </v-btn>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['menu'],
+  // props: ['menu'],
+  data () {
+    return {
+      menu: false
+    }
+  },
   computed: {
     user () {
       return this.$auth.$state.user
     }
   },
   methods: {
+    handleMenu () {
+      if (this.user) {
+        this.menu = !this.menu
+      } else {
+        this.$router.replace('/login')
+      }
+    },
     async logout () {
       await this.$auth.logout()
-      this.$emit('logout')
+      this.menu = false
     }
   }
 }
