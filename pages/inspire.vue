@@ -21,6 +21,9 @@ export default {
     state () {
       return JSON.stringify(this.$auth.$state, undefined, 2)
     }
+  },
+  mounted () {
+    console.log('inspire mounted auth %o', this.$auth)
   }
 }
 </script>

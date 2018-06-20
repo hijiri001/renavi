@@ -26,31 +26,35 @@
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left="clipped">
       <v-toolbar-side-icon @click="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn
+      <!-- <v-btn
         icon
         @click.stop="miniVariant = !miniVariant"
       >
         <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn
+      </v-btn> -->
+      <!-- <v-btn
         icon
         @click.stop="clipped = !clipped"
       >
         <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn
+      </v-btn> -->
+      <!-- <v-btn
         icon
         @click.stop="fixed = !fixed"
       >
         <v-icon>remove</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         icon
-        @click.stop="rightDrawer = !rightDrawer"
+        @click.stop="handleMenu()"
       >
-        <v-icon>menu</v-icon>
+        <v-avatar v-if="user" size="42">
+          <img :src="user.picture" >
+          <logout :menu="menu" @logout="menu = false" />
+        </v-avatar>
+        <v-icon v-else>apps</v-icon>
       </v-btn>
     </v-toolbar>
     <v-content>
@@ -80,21 +84,44 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        clipped: false,
-        drawer: true,
-        fixed: false,
-        items: [
-          { icon: 'apps', title: 'Welcome', to: '/' },
-          { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
-        ],
-        miniVariant: false,
-        right: true,
-        rightDrawer: false,
-        title: 'Vuetify.js'
+import logout from '~/components/logout'
+
+export default {
+  components: {
+    logout
+  },
+  mounted () {
+    console.log('default this %o', this)
+  },
+  data () {
+    return {
+      clipped: true,
+      drawer: true,
+      fixed: false,
+      items: [
+        { icon: 'apps', title: 'Welcome', to: '/' },
+        { icon: 'bubble_chart', title: 'Inspire', to: '/inspire' }
+      ],
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'REナビ',
+      menu: false
+    }
+  },
+  computed: {
+    user () {
+      return this.$auth.$state.user
+    }
+  },
+  methods: {
+    handleMenu () {
+      if (this.user) {
+        this.menu = !this.menu
+      } else {
+        this.$router.replace('/login')
       }
     }
   }
+}
 </script>
